@@ -1,0 +1,16 @@
+  
+
+   
+
+
+Clinica Odontologica Coc
+-----------------------------
+Minha irmã gostaria de um sistema para gerenciar
+sua clinica.
+
+- Gerenciar os pacientes
+- Gerenciar outras dentistas
+- Gerenciar consultas
+- Gerenciar contratos
+- Gerenciar pagamentos				
+
