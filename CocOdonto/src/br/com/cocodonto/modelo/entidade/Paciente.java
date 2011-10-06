@@ -20,6 +20,8 @@ public class Paciente {
 	
 	private Contato contato;
 
+	private Paciente responsavelPor;
+	
 	public Paciente(long id, String nome, String rg, String cpf, SexoType sexo,
 			Endereco endereco, Contato contato) {
 		super();
@@ -103,6 +105,14 @@ public class Paciente {
 
 	public void setContato(Contato contato) {
 		this.contato = contato;
+	}
+
+	public Paciente getResponsavelPor() {
+		return responsavelPor;
+	}
+
+	public void setResponsavelPor(Paciente responsavelPor) {
+		this.responsavelPor = responsavelPor;
 	}
 
 	@Override
