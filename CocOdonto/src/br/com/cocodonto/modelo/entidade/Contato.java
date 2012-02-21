@@ -1,13 +1,28 @@
 package br.com.cocodonto.modelo.entidade;
 
 public class Contato {
-
+	
+	private long id;
 	private String email;
 	private String telfone;
 	private String celular;
 
 	public Contato() {
 	}
+
+	
+	
+	public long getId() {
+		return id;
+	}
+
+
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+
 
 	public String getEmail() {
 		return email;

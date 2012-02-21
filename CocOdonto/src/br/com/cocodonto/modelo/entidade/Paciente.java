@@ -3,6 +3,8 @@
  */
 package br.com.cocodonto.modelo.entidade;
 
+import java.util.Date;
+
 /**
  * @author Bisso
  *
@@ -13,7 +15,7 @@ public class Paciente {
 	private String nome;
 	private String rg;
 	private String cpf;
-
+	private Date criacao;
 	private SexoType sexo;
 
 	private Endereco endereco;
@@ -113,6 +115,14 @@ public class Paciente {
 
 	public void setResponsavelPor(Paciente responsavelPor) {
 		this.responsavelPor = responsavelPor;
+	}
+
+	public Date getCriacao() {
+		return criacao;
+	}
+
+	public void setCriacao(Date criacao) {
+		this.criacao = criacao;
 	}
 
 	@Override
