@@ -13,18 +13,17 @@ public class PacienteDaoTest {
 	 */
 	public static void main(String[] args) {
 		
-		Paciente paciente = new Paciente("Katatau", "3284973423", "90485098", SexoType.M);
+		Paciente paciente = new Paciente("Katatau2", "3284973423", "90485098", SexoType.M);
 		paciente.setCriacao(new Date());
-		Endereco end = new Endereco("End do Tio"
-									,"Cid do Tio"
-									,"Bairro do Tio"
-									, "Cep do Tio"  );
+		Endereco end = new Endereco("End do Katatau2"
+									,"Cid do Katatau2"
+									,"Bairro do Katatau2"
+									,"CepKata"  );
 		
 		paciente.setEndereco(end);
 		
 		PacienteDao dao = new PacienteDao();
-		
-		dao.insertTudao(paciente);
+		dao.inserir(paciente);
 		
 		
 	}
