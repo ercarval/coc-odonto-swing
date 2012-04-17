@@ -4,7 +4,7 @@ public class Contato {
 	
 	private long id;
 	private String email;
-	private String telfone;
+	private String telefone;
 	private String celular;
 
 	public Contato() {
@@ -32,12 +32,12 @@ public class Contato {
 		this.email = email;
 	}
 
-	public String getTelfone() {
-		return telfone;
+	public String getTelefone() {
+		return telefone;
 	}
 
-	public void setTelfone(String telfone) {
-		this.telfone = telfone;
+	public void setTelefone(String telfone) {
+		this.telefone = telfone;
 	}
 
 	public String getCelular() {
@@ -48,17 +48,32 @@ public class Contato {
 		this.celular = celular;
 	}
 
-	
-	
+
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Contato [id=").append(id).append(", email=")
+				.append(email).append(", telefone=").append(telefone)
+				.append(", celular=").append(celular).append("]");
+		return builder.toString();
+	}
+
+
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((celular == null) ? 0 : celular.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + ((telfone == null) ? 0 : telfone.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
+		result = prime * result
+				+ ((telefone == null) ? 0 : telefone.hashCode());
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -79,26 +94,18 @@ public class Contato {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (telfone == null) {
-			if (other.telfone != null)
+		if (id != other.id)
+			return false;
+		if (telefone == null) {
+			if (other.telefone != null)
 				return false;
-		} else if (!telfone.equals(other.telfone))
+		} else if (!telefone.equals(other.telefone))
 			return false;
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("Contato [ email= ")
-				.append(email)
-				.append(", telfone= ")
-				.append(telfone)
-				.append(", celular= ")
-				.append(celular)
-				.append(" ]");
-		return builder.toString();
-	}
+	
+	
 	
 	
 	

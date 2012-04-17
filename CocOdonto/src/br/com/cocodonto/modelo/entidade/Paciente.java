@@ -9,18 +9,18 @@ import java.util.Date;
  * @author Bisso
  *
  */
-public class Paciente {
-
-	private long id;
-	private String nome;
-	private String rg;
-	private String cpf;
-	private Date criacao;
-	private SexoType sexo;
-
-	private Endereco endereco;
+	public class Paciente {
 	
-	private Contato contato;
+		private long id;
+		private String nome;
+		private String rg;
+		private String cpf;
+		private Date criacao;
+		private SexoType sexo;
+	
+		private Endereco endereco;
+		
+		private Contato contato;
 
 	private Paciente responsavelPor;
 	

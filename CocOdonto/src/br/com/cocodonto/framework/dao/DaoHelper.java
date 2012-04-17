@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.derby.client.am.SqlException;
 
@@ -51,18 +53,18 @@ public class DaoHelper {
 		release(conn);
 		context.remove();
 	}
-	
+
 	public void rollbackTransaction() {
 		Connection conn;
 		try {
 			conn = getConnectionFromContext();
 			rollback(conn);
-			release(conn);			
+			release(conn);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		context.remove();
 	}
 
@@ -70,10 +72,11 @@ public class DaoHelper {
 		conn.commit();
 	}
 
-	public void rollback (Connection conn) throws SQLException {
-		if (conn != null) conn.rollback();
+	public void rollback(Connection conn) throws SQLException {
+		if (conn != null)
+			conn.rollback();
 	}
-	
+
 	public Connection getConnectionFromContext() throws SQLException {
 
 		Connection conn = context.get();
@@ -116,8 +119,8 @@ public class DaoHelper {
 		return result;
 	}
 
-	public void executePreparedUpdate(Connection conn,
-								    	String query, Object... params) throws SQLException {
+	public void executePreparedUpdate(Connection conn, String query,
+			Object... params) throws SQLException {
 		PreparedStatement pstmt = null;
 		try {
 			pstmt = conn.prepareStatement(query);
@@ -129,6 +132,33 @@ public class DaoHelper {
 		} finally {
 			release(pstmt);
 		}
+	}
+
+	public void executePreparedUpdate( String query,
+										Object... params) throws SQLException {
+		executePreparedUpdate(getConnectionFromContext(), query, params);
+	}
+
+	public <T> List<T> executePreparedQuery ( String query,
+			QueryMapper<T> mapper ) throws SQLException {
+		
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rset = null;
+		
+		List<T> list = new ArrayList<T>();
+		
+		try {
+			conn =	getConnection();
+			stmt = conn.createStatement();
+			rset = stmt.executeQuery(query);
+			list = mapper.mapping(rset);
+		} finally {
+			releaseAll(conn, stmt, rset);
+		}
+		
+		return list;
+		
 	}
 
 	public void release(Statement stmt) {
