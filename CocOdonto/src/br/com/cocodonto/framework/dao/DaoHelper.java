@@ -9,7 +9,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.derby.client.am.SqlException;
 
 public class DaoHelper {
 
@@ -29,8 +28,8 @@ public class DaoHelper {
 			conn = DriverManager.getConnection(
 					"jdbc:derby://localhost:1527/coc", "app", "app");
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//TODO refatorar para dar suporte a resourcebundle.
+			throw new ConnectionFailureDaoException( "Não foi possível realizar a conexao", e  );
 		}
 
 		return conn;
@@ -93,7 +92,10 @@ public class DaoHelper {
 	}
 
 	public long executePreparedUpdateAndReturnGeneratedKeys(Connection conn,
-			String query, Object... params) throws SQLException {
+															String query
+															, Object... params) 
+																		throws SQLException {
+		
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
 		long result = 0l;
@@ -135,12 +137,15 @@ public class DaoHelper {
 	}
 
 	public void executePreparedUpdate( String query,
-										Object... params) throws SQLException {
+										Object... params) 
+													throws SQLException {
+		
 		executePreparedUpdate(getConnectionFromContext(), query, params);
 	}
 
 	public <T> List<T> executePreparedQuery ( String query,
-			QueryMapper<T> mapper ) throws SQLException {
+											QueryMapper<T> mapper ) 
+															throws SQLException {
 		
 		Connection conn = null;
 		Statement stmt = null;
@@ -162,8 +167,7 @@ public class DaoHelper {
 	}
 
 	public void release(Statement stmt) {
-		if (stmt == null)
-			return;
+		if (stmt == null) return;
 		try {
 			stmt.close();
 		} catch (SQLException e) {
@@ -172,8 +176,7 @@ public class DaoHelper {
 
 	public void release(Connection conn) {
 
-		if (conn == null)
-			return;
+		if (conn == null) return;
 		try {
 			conn.close();
 		} catch (SQLException e) {
@@ -182,8 +185,7 @@ public class DaoHelper {
 	}
 
 	public void release(ResultSet rset) {
-		if (rset == null)
-			return;
+		if (rset == null) return;
 		try {
 			rset.close();
 		} catch (SQLException e) {
