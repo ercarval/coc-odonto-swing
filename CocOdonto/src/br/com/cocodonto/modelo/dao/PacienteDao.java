@@ -10,8 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.derby.client.am.SqlException;
+import org.w3c.dom.ls.LSInput;
+
 import br.com.cocodonto.framework.dao.CreateDaoException;
 import br.com.cocodonto.framework.dao.DaoHelper;
+import br.com.cocodonto.framework.dao.QueryMapper;
+import br.com.cocodonto.framework.dao.UpdateDaoException;
 import br.com.cocodonto.framework.dao.QueryMapper;
 import br.com.cocodonto.framework.dao.UpdateDaoException;
 import br.com.cocodonto.modelo.entidade.Contato;
@@ -21,7 +26,7 @@ import br.com.cocodonto.modelo.entidade.SexoType;
 /**
  * 
  * @author Bisso
- * @version $
+ *
  */
 public class PacienteDao {
 	
@@ -34,14 +39,11 @@ public class PacienteDao {
 	
 	public void inserir (Paciente paciente) throws CreateDaoException {
 		
-		Connection conn = null;
 		try {
 			
 			daoHelper.beginTransaction();
 			
-			conn = daoHelper.getConnectionFromContext();
-			
-			long id =  daoHelper.executePreparedUpdateAndReturnGeneratedKeys(conn
+			long id =  daoHelper.executePreparedUpdateAndReturnGeneratedKeys( daoHelper.getConnectionFromContext()
 					                                      , "insert into paciente (nome, rg, cpf, sexo ,dataCriacao) values ( ? , ? , ? , ? , ? )"
 					                                      , paciente.getNome()
 					                                      , paciente.getRg()
@@ -53,14 +55,13 @@ public class PacienteDao {
 			
 			inserirPacienteEndereco(paciente);
 			inserirPacienteContato(paciente);
-			
 			daoHelper.endTransaction();
 
 		} catch (SQLException e) {
 			
 			daoHelper.rollbackTransaction();	
 			
-			throw new CreateDaoException("Não foi possivel realizar a transação", e);
+			throw new CreateDaoException("Nï¿½o foi possivel realizar a transaï¿½ï¿½o", e);
 			
 		} 
 		
@@ -68,95 +69,98 @@ public class PacienteDao {
 	
 	private void inserirPacienteEndereco (Paciente paciente) throws SQLException {
 		
-		if (paciente.getEndereco() == null) return;
-		
 		EnderecoDao enderecoDao = new EnderecoDao();
 		
 		enderecoDao.inserir( paciente.getEndereco() );
 		
+		final String query = "insert into paciente_endereco (paciente_id, endereco_id ) values ( ? , ? )";
+		
 		daoHelper.executePreparedUpdate( daoHelper.getConnectionFromContext()
-										 , "insert into paciente_endereco (paciente_id, endereco_id ) values ( ? , ? )"
+										 , query
 										 , paciente.getId() 
 										 , paciente.getEndereco().getId() );	
 		
 	}
+
 	
-	
-	private void inserirPacienteContato ( Paciente paciente ) throws SQLException {
-		
-		if (paciente.getContato() == null) return;
+	private void inserirPacienteContato (Paciente paciente) throws SQLException {
 		
 		ContatoDao contatoDao = new ContatoDao();
+		
 		contatoDao.inserir( paciente.getContato() );
 		
-		daoHelper.executePreparedUpdate( daoHelper.getConnectionFromContext()
-				 , "insert into paciente_contato (paciente_id, contato_id ) values ( ? , ? )"
-				 , paciente.getId() 
-				 , paciente.getContato().getId() );		
+		final String query = "insert into paciente_contato (paciente_id, contato_id ) values ( ? , ? )";
+		
+		daoHelper.executePreparedUpdate(  query
+                                            , paciente.getId() 
+					    , paciente.getContato().getId() );	
 		
 	}
 	
-	
-	public void atulizar (Paciente paciente) throws UpdateDaoException {
+	public void atualizar (Paciente paciente) throws UpdateDaoException {
+		
+		final String query = "update paciente set nome = ? , rg = ? , cpf = ? , sexo = ? where id = ? ";
 		
 		try {
 			daoHelper.beginTransaction();
+			daoHelper.executePreparedUpdate(query
+										  , paciente.getNome()
+										  , paciente.getRg()
+										  , paciente.getCpf()
+										  , paciente.getSexo().name()
+										  , paciente.getId() );
 
-			daoHelper.executePreparedUpdate( 
-										"update paciente set nome = ? , rg = ? , cpf = ? , sexo = ?  where id = ?"
-										, paciente.getNome()
-										, paciente.getRg()
-						                , paciente.getCpf()
-						                , paciente.getSexo().toString() 
-						                , paciente.getId());
-			daoHelper.endTransaction();
-		} catch (SQLException e) {
-			daoHelper.rollbackTransaction();
-			throw new UpdateDaoException("Não foi possivel atualizar paciente " + paciente ,e );
-		}
-		
-	}
-	
-	public void excluir (Paciente paciente) throws UpdateDaoException {
-		
-		try {
-			daoHelper.beginTransaction();
-			daoHelper.executePreparedUpdate( 
-										"delete from paciente where id = ?"
-						                , paciente.getId());
-			daoHelper.endTransaction();
-		} catch (SQLException e) {
-			daoHelper.rollbackTransaction();
-			throw new UpdateDaoException("Não foi possivel atualizar paciente " + paciente ,e );
-		}
-		
-	}	
-	
-	
-	public List<Paciente> listaTodos() {
-		
-		final List<Paciente>  pacientes = new ArrayList<Paciente>();
-		try {
-			daoHelper.executePreparedQuery("select * from app.paciente"
-					, new QueryMapper<Paciente>() {
-
-						@Override
-						public List<Paciente> mapping(ResultSet rset) throws SQLException {
-							while (rset.next()) {
-								pacientes.add( new Paciente( rset.getLong("id")
-															, rset.getString("nome")
-															, rset.getString("rg")
-															, rset.getString("cpf")
-															, SexoType.valueOf( rset.getString("sexo"))) );
-							}
-							return pacientes;
-						}
-			});
+			atualizarPacienteEndereco(paciente);
+			atualizarPacienteContato(paciente);
 			
+			daoHelper.endTransaction();
 		} catch (SQLException e) {
+			daoHelper.rollbackTransaction();	
+			throw new UpdateDaoException("Nï¿½o foi possï¿½vel atualizar Paciente", e);
 		}
+		
+	}
+		
+
+	public void atualizarPacienteEndereco(Paciente paciente ) throws SQLException {
+		EnderecoDao dao = new EnderecoDao();
+		dao.atualizar(paciente.getEndereco());
+	}
+
+	public void atualizarPacienteContato (Paciente paciente ) throws SQLException {
+		ContatoDao dao = new ContatoDao();
+		dao.atualizar(paciente.getContato());
+	}
+	
+	public List<Paciente> listaTodosPacientes() {
+		
+		final List<Paciente> pacientes = new ArrayList<Paciente>();
+		
+		try {
+		
+			daoHelper.executePreparedQuery("select * form paciente", new QueryMapper<Paciente>() {
+
+				@Override
+				public List<Paciente> mapping(ResultSet rset) throws SQLException {
+					while (rset.next()) {
+						Paciente paciente = new Paciente();
+						paciente.setId( rset.getInt("id") );
+						paciente.setNome( rset.getString("nome") );
+						paciente.setCpf( rset.getString("cpf") );
+						paciente.setRg( rset.getString("rg") );
+						paciente.setSexo( SexoType.valueOf( rset.getString("sexo") ) );
+						pacientes.add(paciente);
+					}
+					return pacientes;
+				}
+				
+			});
+		} catch (SQLException e) {
+			//ignore exception
+		}
+		
 		return pacientes;
 		
 	}
-
+	
 }
