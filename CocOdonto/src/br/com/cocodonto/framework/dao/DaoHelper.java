@@ -36,12 +36,20 @@ public class DaoHelper {
 
 	}
 
+	
+	
 	public void beginTransaction() throws SQLException {
+		if (isTransactionStarted()) return; // << 13 -- provide support to transaction propagation
 		Connection conn = getConnection();
 		conn.setAutoCommit(false);
 		context.set(conn);
 	}
 
+	
+	private boolean isTransactionStarted () {
+		return ( context.get() != null );
+	}
+	
 	public void endTransaction() throws SQLException {
 		commit(getConnectionFromContext());
 		releaseTransaction();
@@ -134,6 +142,12 @@ public class DaoHelper {
 		} finally {
 			release(pstmt);
 		}
+	}
+	
+	public void executePreparedUpdateIntoSingleTransaction ( String query,
+															Object... params) 
+															throws SQLException {
+		executePreparedUpdate(getConnection(), query, params);
 	}
 
 	public void executePreparedUpdate( String query,
