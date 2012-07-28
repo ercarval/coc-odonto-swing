@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class PacienteDaoTest {
 
-	/**
+	/** 
 	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
