@@ -33,7 +33,7 @@ public class ContatoDao {
 		}
 	}
 
-	public void atulizar (Contato contato) throws UpdateDaoException {
+	public void atualizar (Contato contato) throws UpdateDaoException {
 		
 		try {
 			
@@ -53,15 +53,11 @@ public class ContatoDao {
 	}
 
 	public void excluir (Contato contato) throws DeleteDaoException {
-		
 		try {
-			
 			daoHelper
-					.executePreparedUpdate (
-							daoHelper.getConnectionFromContext()
-							, "delete from contato where ID=?"
+					.executePreparedUpdateIntoSingleTransaction(
+							  "delete from contato where ID=?"
 							, contato.getId());
-
 		} catch (SQLException e) {
 			throw new DeleteDaoException("Nao foi possivel excluir Contato "
 					+ contato, e);

@@ -33,7 +33,7 @@ public class PacienteDaoTest {
 		PacienteDao dao = new PacienteDao();
 		dao.inserir(paciente);
 		
-		List<Paciente> list = dao.listaTodos();
+		List<Paciente> list = dao.listaTodosPacientes();
 		
 	}
 
