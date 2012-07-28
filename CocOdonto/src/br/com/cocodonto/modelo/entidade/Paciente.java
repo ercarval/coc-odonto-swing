@@ -9,24 +9,29 @@ import java.util.Date;
  * @author Bisso
  *
  */
-	public class Paciente {
+public class Paciente {
 	
-		private long id;
-		private String nome;
-		private String rg;
-		private String cpf;
-		private Date criacao;
-		private SexoType sexo;
+	private long id;
+	private String nome;
+	private String rg;
+	private String cpf;
+	private Date criacao;
+	private SexoType sexo;
 	
-		private Endereco endereco;
+	private Endereco endereco;
 		
-		private Contato contato;
+	private Contato contato;
 
 	private Paciente responsavelPor;
 	
+	public Paciente() {
+		criacao = new Date();
+                sexo = SexoType.F;
+	}
+	
 	public Paciente(long id, String nome, String rg, String cpf, SexoType sexo,
 			Endereco endereco, Contato contato) {
-		super();
+
 		this.id = id;
 		this.nome = nome;
 		this.rg = rg;
@@ -37,7 +42,6 @@ import java.util.Date;
 	}
 
 	public Paciente(long id, String nome, String rg, String cpf, SexoType sexo) {
-		super();
 		this.id = id;
 		this.nome = nome;
 		this.rg = rg;
@@ -46,7 +50,6 @@ import java.util.Date;
 	}
 
 	public Paciente(String nome, String rg, String cpf, SexoType sexo) {
-		super();
 		this.nome = nome;
 		this.rg = rg;
 		this.cpf = cpf;
