@@ -13,20 +13,33 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
  * @author Bisso
  */
-public class PacienteActionListener implements ActionListener {
+public class PacienteActionListener implements ActionListener 
+                                    , ListSelectionListener {
 
     private PacienteFrm frm;
     private PacienteService service;
-    
+    private PacienteTableModel tableModel;
     public PacienteActionListener(PacienteFrm frm) {
         this.frm = frm;
         service = new PacienteService();
         adicionaListener();
+        inicializaTableModel();
+    }
+    
+    public void inicializaTableModel() {
+        List<Paciente> pacientes = service.getPacientes();
+        tableModel = new PacienteTableModel(pacientes);
+        frm.getTbPacientes().setModel(tableModel);
+        frm.getTbPacientes()
+                .getSelectionModel()
+                .addListSelectionListener( this );
     }
     
     public void adicionaListener() {
@@ -100,6 +113,15 @@ public class PacienteActionListener implements ActionListener {
         return paciente;
     }
     
+    private void pacienteToForm(Paciente paciente) {
+        
+        frm.getLblIdPaciente().setText( Long.toString ( paciente.getId() ) );
+        frm.getTxtNome().setText( paciente.getNome());
+        frm.getTxtRg().setText( paciente.getRg() );
+        frm.getTxtCpf().setText( paciente.getCpf() );
+    
+    }
+    
     private Contato formToContato () {
         
         Contato contato = new Contato();
@@ -127,6 +149,14 @@ public class PacienteActionListener implements ActionListener {
         endereco.setBairro( frm.getTxtBairro().getText()  );
         
         return endereco;
+    }
+
+    @Override
+    public void valueChanged(ListSelectionEvent event) {
+        
+        Paciente paciente = tableModel.getPacientes().get(frm.getTbPacientes().getSelectedRow());
+        System.out.println(paciente);
+        pacienteToForm(paciente);
     }
 
 }
