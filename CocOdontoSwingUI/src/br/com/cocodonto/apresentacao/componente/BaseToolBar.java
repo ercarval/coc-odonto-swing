@@ -4,6 +4,9 @@
  */
 package br.com.cocodonto.apresentacao.componente;
 
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JButton;
 import javax.swing.JSeparator;
 import javax.swing.JToolBar;
@@ -14,6 +17,7 @@ import javax.swing.JToolBar;
  */
 public class BaseToolBar extends JToolBar {
 
+    private Map<String,JButton> buttons;
     private JButton btnAlterar;
     private JButton btnCancelar;
     private JButton btnCriar;
@@ -39,14 +43,19 @@ public class BaseToolBar extends JToolBar {
         super();
         initilize();
     }
-
+    
+    
     private void initilize() {
+        
+        buttons = new HashMap<String, JButton>();
         
         btnCriar = new JButton();
         btnAlterar = new JButton();
         btnCancelar = new JButton();
         btnSalvar = new JButton();
-
+        
+        registerButtons(btnCriar, btnCancelar, btnCriar, btnSalvar);
+        
         setFloatable(false);
 
         btnCriar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/cocodonto/apresentacao/images/add1-24.png"))); // NOI18N
@@ -72,7 +81,6 @@ public class BaseToolBar extends JToolBar {
         separator.setRequestFocusEnabled(false);
         add(separator);        
         
-        
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/cocodonto/apresentacao/images/success24.png"))); // NOI18N
         btnSalvar.setToolTipText("salvar");
         btnSalvar.setActionCommand("salvar");
@@ -91,5 +99,69 @@ public class BaseToolBar extends JToolBar {
         btnCancelar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         add(btnCancelar);
         
+        
     }
+    
+    private void registerButtons (JButton... buttons) {
+        
+        for (JButton button : buttons) {
+            this.buttons.put(button.getActionCommand(), button);
+        }
+    }
+
+    private void registerActionListener(ActionListener listener) {
+        for (JButton button : buttons.values()) {
+            button.addActionListener(listener);
+        }
+    }
+
+    public JButton getBtnAlterar() {
+        return btnAlterar;
+    }
+
+    public void setBtnAlterar(JButton btnAlterar) {
+        this.btnAlterar = btnAlterar;
+    }
+
+    public JButton getBtnCancelar() {
+        return btnCancelar;
+    }
+
+    public void setBtnCancelar(JButton btnCancelar) {
+        this.btnCancelar = btnCancelar;
+    }
+
+    public JButton getBtnCriar() {
+        return btnCriar;
+    }
+
+    public void setBtnCriar(JButton btnCriar) {
+        this.btnCriar = btnCriar;
+    }
+
+    public JButton getBtnSalvar() {
+        return btnSalvar;
+    }
+
+    public void setBtnSalvar(JButton btnSalvar) {
+        this.btnSalvar = btnSalvar;
+    }
+
+    public Map<String, JButton> getButtons() {
+        return buttons;
+    }
+
+    public void setButtons(Map<String, JButton> buttons) {
+        this.buttons = buttons;
+    }
+    
+    public void saveAndCancelEnabled(boolean enabled) {
+        btnSalvar.setEnabled(enabled);
+        btnCancelar.setEnabled(enabled);
+    }
+
+    
+    
+
+    
 }

@@ -17,10 +17,24 @@ public class PacienteActionListener implements ActionListener {
     private PacienteService service;
 
     public PacienteActionListener(PacienteFrm frm) {
-    
         this.frm = frm;
         service = new PacienteService();
-
+        adicionaListener();
+    }
+    
+    public void adicionaListener() {
+        
+        defineTableModel();
+       /* frm.addInternalFrameListener( new InternalFrameAdapter() {
+            @Override
+            public void internalFrameOpened(InternalFrameEvent e) {
+            }
+        });*/
+        
+    }
+    
+    public void defineTableModel() {
+        frm.getTbPacientes().setModel(  new PacienteTableModel( service.getPacientes()  ) );
     }
     
     @Override

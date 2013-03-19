@@ -4,6 +4,8 @@
  */
 package br.com.cocodonto.apresentacao.main;
 
+import br.com.cocodonto.apresentacao.consulta.ConsultaForm;
+import br.com.cocodonto.apresentacao.dentista.DentistaFrm;
 import br.com.cocodonto.apresentacao.paciente.PacienteFrm;
 
 /**
@@ -36,6 +38,7 @@ public class MainForm extends javax.swing.JFrame {
         saveAsMenuItem = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
         editMenu = new javax.swing.JMenu();
+        novoOrcamento = new javax.swing.JMenuItem();
         helpMenu = new javax.swing.JMenu();
         contentMenuItem = new javax.swing.JMenuItem();
         aboutMenuItem = new javax.swing.JMenuItem();
@@ -60,6 +63,11 @@ public class MainForm extends javax.swing.JFrame {
         saveMenuItem.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/cocodonto/apresentacao/images/Physician.png"))); // NOI18N
         saveMenuItem.setMnemonic('s');
         saveMenuItem.setText("Dentistas");
+        saveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveMenuItemActionPerformed(evt);
+            }
+        });
         fileMenu.add(saveMenuItem);
 
         saveAsMenuItem.setMnemonic('a');
@@ -79,7 +87,21 @@ public class MainForm extends javax.swing.JFrame {
         menuBar.add(fileMenu);
 
         editMenu.setMnemonic('e');
-        editMenu.setText("OrÃ§amento");
+        editMenu.setText("Orçamento");
+        editMenu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                editMenuActionPerformed(evt);
+            }
+        });
+
+        novoOrcamento.setText("jMenuItem1");
+        novoOrcamento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                novoOrcamentoActionPerformed(evt);
+            }
+        });
+        editMenu.add(novoOrcamento);
+
         menuBar.add(editMenu);
 
         helpMenu.setMnemonic('h');
@@ -116,11 +138,30 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     private void openMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuItemActionPerformed
-        // TODO add your handling code here:
+        
         PacienteFrm form = new PacienteFrm();
+        
         form.setVisible(true);
         desktopPane.add (form);
     }//GEN-LAST:event_openMenuItemActionPerformed
+
+    private void saveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveMenuItemActionPerformed
+        DentistaFrm frm = new DentistaFrm();
+        frm.setVisible(true);
+        desktopPane.add(frm);
+    }//GEN-LAST:event_saveMenuItemActionPerformed
+
+    private void editMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editMenuActionPerformed
+       
+        
+        
+    }//GEN-LAST:event_editMenuActionPerformed
+
+    private void novoOrcamentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoOrcamentoActionPerformed
+        ConsultaForm frm = new ConsultaForm();
+        frm.setVisible(true);
+        desktopPane.add(frm);
+    }//GEN-LAST:event_novoOrcamentoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -172,6 +213,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenu helpMenu;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem novoOrcamento;
     private javax.swing.JMenuItem openMenuItem;
     private javax.swing.JMenuItem saveAsMenuItem;
     private javax.swing.JMenuItem saveMenuItem;
